@@ -43,33 +43,48 @@ FFMPEG_FLAGS="--target-os=linux \
   --disable-symver \
   --disable-doc \
   --disable-ffplay \
-  --disable-ffmpeg \
   --disable-ffprobe \
   --disable-ffserver \
   --disable-avdevice \
-  --disable-avfilter \
-  --disable-encoders \
-  --disable-muxers \
-  --disable-filters \
   --disable-devices \
+  --disable-ffmpeg \
+  --disable-swscale \
+  --disable-bsfs \
+  --disable-filters \
+  --disable-avfilter \
+  --disable-postproc \
+  --disable-swresample \
   --disable-everything \
-  --enable-protocols  \
-  --enable-parsers \
-  --enable-demuxers \
-  --enable-decoders \
-  --enable-bsfs \
+  --enable-decoder=rawvideo \
+  --enable-decoder=wmapro \
+  --enable-decoder=wmav1 \
+  --enable-decoder=wmav2 \
+  --enable-decoder=wmavoice \
+  --enable-decoder=aac \
+  --enable-decoder=aac_latm \
+  --enable-decoder=mp1 \
+  --enable-decoder=mp1float \
+  --enable-decoder=mp2 \
+  --enable-decoder=mp2float \
+  --enable-decoder=mp3 \
+  --enable-decoder=mp3adu \
+  --enable-decoder=mp3adufloat \
+  --enable-decoder=mp3float \
+  --enable-decoder=mp3on4 \
+  --enable-decoder=mp3on4float \
+  --enable-demuxer=asf \
+  --enable-demuxer=flv \
+  --enable-protocol=http \
+  --enable-protocol=rtmp \
+  --enable-protocol=mmst \
+  --enable-protocol=mmsh \
   --enable-network \
-  --enable-swscale  \
-  --disable-demuxer=sbg \
-  --disable-demuxer=dts \
-  --disable-parser=dca \
-  --disable-decoder=dca \
   --enable-asm \
   --enable-version3"
 
 
-for version in neon armv7 vfp armv6 armv5te; do
-
+#for version in neon armv7 vfp armv6 armv5te; do
+for version in armv5te; do
   cd $SOURCE
 
   case $version in
@@ -111,7 +126,7 @@ for version in neon armv7 vfp armv6 armv5te; do
   make install || exit 1
 
   rm libavcodec/inverse.o
-  $CC -lm -lz -shared --sysroot=$SYSROOT -Wl,--no-undefined -Wl,-z,noexecstack $EXTRA_LDFLAGS libavutil/*.o libavutil/arm/*.o libavcodec/*.o libavcodec/arm/*.o libavformat/*.o libswresample/*.o libswscale/*.o -o $PREFIX/libffmpeg.so
+  $CC -lm -lz -shared --sysroot=$SYSROOT -Wl,--no-undefined -Wl,-z,noexecstack $EXTRA_LDFLAGS libavutil/*.o libavutil/arm/*.o libavcodec/*.o libavcodec/arm/*.o libavformat/*.o -o $PREFIX/libffmpeg.so
 
   cp $PREFIX/libffmpeg.so $PREFIX/libffmpeg-debug.so
   arm-linux-androideabi-strip --strip-unneeded $PREFIX/libffmpeg.so
