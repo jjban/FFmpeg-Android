@@ -68,7 +68,7 @@ FFMPEG_FLAGS="--target-os=linux \
   --enable-version3"
 
 
-for version in neon armv7 vfp armv6; do
+for version in neon armv7 vfp armv6 armv5te; do
 
   cd $SOURCE
 
@@ -87,6 +87,10 @@ for version in neon armv7 vfp armv6; do
       ;;
     armv6)
       EXTRA_CFLAGS="-march=armv6"
+      EXTRA_LDFLAGS=""
+      ;;
+    armv5te)
+	  EXTRA_CFLAGS="-march=armv5te"
       EXTRA_LDFLAGS=""
       ;;
     *)
